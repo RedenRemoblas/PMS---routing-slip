@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 150">
+  <!-- Sun (yellow) -->
+  <circle cx="150" cy="75" r="30" fill="#FCD116"/>
+  
+  <!-- Sun rays -->
+  <g fill="#FCD116">
+    <!-- 8 rays around the sun -->
+    <polygon points="150,35 155,55 145,55"/>
+    <polygon points="150,115 145,95 155,95"/>
+    <polygon points="110,75 130,70 130,80"/>
+    <polygon points="190,75 170,80 170,70"/>
+    <polygon points="122,47 137,60 127,67"/>
+    <polygon points="178,103 163,90 173,83"/>
+    <polygon points="122,103 127,83 137,90"/>
+    <polygon points="178,47 173,67 163,60"/>
+  </g>
+  
+  <!-- Three stars (yellow) -->
+  <g fill="#FCD116">
+    <polygon points="120,40 123,46 130,47 125,52 126,59 120,56 114,59 115,52 110,47 117,46"/>
+    <polygon points="180,40 183,46 190,47 185,52 186,59 180,56 174,59 175,52 170,47 177,46"/>
+    <polygon points="150,110 153,116 160,117 155,122 156,129 150,126 144,129 145,122 140,117 147,116"/>
+  </g>
+  
+  <!-- Text "BAGONG PILIPINAS" -->
+  <text x="150" y="145" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#0038A8">BAGONG PILIPINAS</text>
+</svg>

@@ -1,0 +1,214 @@
+What can affect the leave balance
+
+-if created and status pending add to the reserved value
+-if created and approved..change status to approved then subtract from reserved and subtract from remaining
+if created..pending and cancelled ..subtract from reserved and add to remaining
+if pending and disapproved..subtract from reserved and add to remaining
+
+#to create users/ employee in tinker
+#php artisan tinker
+user first
+\App\Models\User::factory()->count(50)->create();
+\App\Models\Employee::factory()->count(50)->create();
+
+
+
+php artisan schedule:run
+php artisan queue:work
+
+#run the seeder for places
+php artisan db:seed --class=PlacesTableSeeder
+
+php artisan db:seed --class=DtrTableSeeder
+php artisan db:seed --class=LeaveTypesTableSeeder
+
+
+//to create the link
+php artisan storage:link
+
+
+admin
+1. setup
+2. roles
+3. users
+4. create employee?
+
+hr-admin
+3. edit employees
+
+#do this to link and access the storage
+php artisan storage:link
+
+
+php artisan make:filament-user
+
+August 5, 2024
+Fix this, Leave must have at least one leave detail.
+
+
+August 13, 2024
+Fix
+1. Dtr PDF -> resources\hr\dtr-resource\pages\dtr_pdf.blade.php
+2. Travel Order Pdf -> resources/views/travel_order.blade.php
+
+to install you need you migrate:fresh
+
+
+10-10-2024
+
+fix the travel order detail. it is not intended to be shown but only a relation manager component
+
+
+-create another action in listapproval
+
+
+work on the approve button in custom blade file
+
+
+December 26, 2024: Module status
+
+1. Default Approvers - this is used in travel order.
+   Working. but cant determine duplicate sequence no.
+
+2. Setup/ Division - Working
+3. Setup/ Holiday - working
+4. Setup/ Positions - working
+
+//employee
+
+5. employees - no create? only employee === null. This is to make sure user is associated with the employee
+   check policies when there is a need to enable admin creation
+
+   working
+
+6. Coc Applications
+    Will follow procedure in approving
+    Connect Coc to Travel and Overtime Order
+
+    -pending
+    -do travel and overtime first
+
+
+
+
+7. Leave Approval
+
+  App\Filament\Resources\Hr\LeaveApprovalResource\Pages\ViewLeaveApprovals::promptFileUpload does not exist.
+  disable approve if no file uploaded : done
+
+
+Changing to ReviewLeaves. Check what will be the status upon creation..pending the locked? yes it should be then either approved/disapproved/cancelled
+uploading now ok : Pending..DONE
+
+check if credit is deducted or  reverted. it might be included in the model : done for lock approve and delete DONE
+
+Approve is disabled until save changes. so save changes first then approve. same thing with disapproved
+or add something like save and approve. done
+
+user should be able to cancel lock records but not yet approved //done
+user should be able to cancel a leave. (or hr should do it?)  //can cancel leave not yet approved for now
+cancel must be implemented but make sure it was not used in DTR
+
+As of December 30. Looks all good for leave and review module.
+
+
+Leave Usage : THinking about removing this? cant rememeber the use of this. History can be generated from leaves DtrTableSeeder
+
+
+Travel Order Status / Travel Order Approval Stage Resource is not necessary I think,
+Will just make it simple this time. I think the objective is for someone to add
+approver (focal) before any travel. will think about this first.
+
+
+
+
+January 7, 2025
+Resolve the leave accrual centralized code tomorrow. am drunk
+DONE!
+
+
+Created OvertimeOrder and ReviewOvertimeOrder. done
+        Add View PDF done
+        No approval process yet. done.
+
+then in CoC later add also the overtime
+
+
+check all that requires approval. Create button shows only when there is approver
+
+
+COC Application: January 16
+
+set DefaultApprover as approvers
+todo: lock pending file
+
+COC Application and Approval Done. It also udpates the Leave Accrual and balance
+
+Next:
+
+DTR : done
+DTR Adjustment : done with approval
+Just add entry to DTR in approved //done
+
+Leave beginning balance. next
+
+
+lets fix the roles
+
+
+update: a user can still be deleted even with employee associated as long as employee dont have transaction yet.
+a user can be deleted if still in new user. done
+
+check employee policy when you return. user should be able to edit its profile..done
+
+Verifying each module for roles and access:
+
+ReviewDtrAdjustment. done
+
+
+To resolve the issue error when manually entering dates in dtr filter : done
+
+
+Next Overtime Management : Done
+
+review should only be avail to approvers
+
+***Review Approvers access
+
+    public static function getEloquentQuery(): Builder
+    {
+        $user = auth()->user();
+
+        return parent::getEloquentQuery()
+            ->whereHas('approvalStages', function ($query) use ($user) {
+                $query->where('employee_id', $user->employee->id);
+            })
+            ->where('status', 'locked');
+    }
+
+
+Next:
+
+
+COC Application : done
+Leave Management
+  leaves
+     issue --> 6.C number of working days is not updated when changing perio/leave date.
+               get back to this later. for now make sure the total days changes
+
+  balances
+  types
+  review -> no approval stages. i hid the item in navigation but needs to restrict access in web route maybe
+  accruaLS
+Travel Order
+
+
+lEAVE BALANCES defaults to 99 --done
+
+if leave pdf is already exisiting and leave record was deleted then it willnot generate a new pdf
+should delete file if exist (??)
+
+
+
+travel order DONE
+OVERTIME DONE
